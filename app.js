@@ -49,7 +49,7 @@ var questions = [
 		philosopher: 'Edmund Burke',
 		answer: 'Beauty and the Sublime',
 		incorrectAnswers: ['Necessary Connection', '4 causes', 'Monads']
-	},
+	}
 ];
 
 // state variable
@@ -57,12 +57,34 @@ var state = {
 	// holds quiz question objects. Question objects contain a question (string) and answers (string)
 	quiz: []
 };
+
 // functions to modify state
-	
+
+	// function to append random question objects to quiz array
+	function createQuiz(state) {
+		for (i=0; i < 5; i++) {
+			state.quiz.push(questions[Math.floor(Math.random() * 6) + 1]);
+		}
+		console.log(state.quiz);
+	}
+
+	function resetState(state) {
+		state.quiz = [];
+
+	}
+
 // functions to render state
 
 // event listeners to call state-modifying and state-rendering functions
 
 $(document).ready(function() {
+
+	// begin quiz
+
+	// submit answer
+
+	// continue quiz
+
+	// restart quiz
 
 });
