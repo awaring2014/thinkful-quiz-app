@@ -83,8 +83,8 @@ var state = {
 	}
 
 	// function to push single question object into state.quiz
-	function pushQuestion(state, object, questionIndex) {
-		state.quiz.question = object[questionIndex];
+	function pushQuestion(state, object) {
+		state.quiz.question = object[state.quiz.progress-1];
 	}
 
 	// function to initialize Question Progress object w/i state.quiz
@@ -100,7 +100,6 @@ var state = {
 	// function to push feedback object to state based on answer chosen
 	function pushFeedback(state, object) {
 		var jsFormVal = $("input[type='radio'][name='quiz-answer']:checked").val();
-		console.log(jsFormVal);
 		if (jsFormVal === 'answer1') {
 			state.quiz.feedback = object.correct;
 		} else {
@@ -147,7 +146,7 @@ var state = {
 		return $(
 			'<h3>' + state.quiz.feedback.h3 + '</h3>' +
   		'<p class="content">' + state.quiz.feedback.p + '</p>' +
-  		'<button>Continue</button>'
+  		'<button id="continue">Continue</button>'
 		);
 	}
 
@@ -166,24 +165,27 @@ $(document).ready(function() {
 	// begin quiz
 	$('.begin').click(function (event) {
 		event.preventDefault();
-		createQuizObject(questions, questionObjectArray);
-		pushQuestion(state, questionObjectArray, 0);
-		renderQuestionPage($('main'), state);
 		initQuestionProgressCounter(state);
+		createQuizObject(questions, questionObjectArray);
+		pushQuestion(state, questionObjectArray);
+		renderQuestionPage($('main'), state);
 	});
 
 	// submit answer
 	$(document).on('submit', '#js-quiz', function(event) {
 		event.preventDefault();
-		console.log('submitted');
+		delete state.quiz.question;
 		pushFeedback(state, feedbackObject);
 		renderFeedbackPage($('main'), state);
 	});
 
 	// continue quiz
-	// $('.continue').click(function(event) {
-	// 	incrementQuestionProgressCounter(state);
-	// });
+	$(document).on('click', '#continue', function(event) {
+		event.preventDefault();
+		incrementQuestionProgressCounter(state);
+		pushQuestion(state, questionObjectArray);
+		renderQuestionPage($('main'), state);
+	});
 
 	// restart quiz
 
