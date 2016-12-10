@@ -115,10 +115,10 @@ function resetState(state) {
 	state.quiz = [];
 }
 
-// function to build question page markup
-function buildQuestion(state) {
+// function to build and render question page
+function renderQuestionPage(element, state) {
 	var questionText = 'Of the choices, for which idea is ' + state.quiz.question.philosopher + ' best known?';
-	return $(
+	element.html($(
 		'<h3>Question ' + state.quiz.progress + ' of 5</h3>' +
 		'<p class="content">' + questionText + '</p>' +
 		'<div>' +
@@ -138,53 +138,37 @@ function buildQuestion(state) {
         '<button type="submit">Submit</button>' +
       '</form>' +
     '</div>'
-	);
+	));
 }
 
-// function to build feedback page in html
-function buildFeedbackPage(state) {
-	return $(
+// function to build and render feedback page
+function renderFeedbackPage(element, state) {
+	element.html($(
 		'<h3>' + state.quiz.feedback.h3 + '</h3>' +
 		'<p class="content">' + state.quiz.feedback.p + '</p>' +
 		'<button id="continue">Continue</button>'
-	);
+	));
 }
 
-// function to build results page in html
-function buildResultsPage(state) {
-	return $(
+// function to build and render results page
+function renderResultsPage(element, state) {
+	element.html($(
 		'<h3>Congratulations, you finished the quiz!</h3>' +
 		'<p class="content">You answered ' + state.quiz.correct + ' questions correctly!</p>' +
 		'<button id="restart">Restart Quiz</button>'
-	);
+	));
 }
 
-// function to build start page in html
-function buildStartPage(state) {
-	return $(
+// function to build and render start page
+function renderStartPage(element) {
+	element.html($(
 		'<main>' +
     	'<h3>Test your knowledge on the history of philosophy with this quick quiz!</h3>' +
 			'<p class="content">Click "Begin" to start!</p>' +
 			'<br>' +
 			'<button id="begin">Begin</button>' +
 		'</main>'
-	);
-}
-
-function renderQuestionPage(element, state) {
-	element.html(buildQuestion(state));
-}
-
-function renderFeedbackPage(element, state) {
-	element.html(buildFeedbackPage(state));
-}
-
-function renderResultsPage(element, state) {
-	element.html(buildResultsPage(state));
-}
-
-function renderStartPage(element, state) {
-	element.html(buildStartPage(state));
+	));
 }
 
 // event listeners to call state-modifying and state-rendering functions
@@ -223,6 +207,6 @@ $(document).ready(function() {
 	// restart quiz from results page
 	$(document).on('click', '#restart', function(event) {
 		resetState(state);
-		renderStartPage($('main'), state);
+		renderStartPage($('main'));
 	});
 });
