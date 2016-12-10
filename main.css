@@ -1,5 +1,10 @@
 * {
 	box-sizing: border-box;
+	font-family: "Roboto", helvetica, sans-serif;
+}
+
+main {
+	text-align: center;
 }
 
 header {
@@ -7,15 +12,11 @@ header {
   margin: 50px 0px 50px 0px;
 }
 
-.content {
-
-}
-
 form {
   margin-bottom: 10px;
 }
 
 button {
-  margin-left: 40px;
   width: 90px;
+  margin-top: 10px;
 }

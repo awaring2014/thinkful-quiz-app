@@ -75,7 +75,10 @@ var state = {
 // function to populate questionObjectArray with 5 random questions
 function createQuizObjectArray(array1, array2) {
 	for (i=0; i < 5; i++) {
-		array2.push(array1[Math.floor(Math.random() * 6) + 1]);
+		var randomIndex = Math.floor(Math.random() * (10 - i)) ;
+		console.log(randomIndex);
+		array2.push(array1[randomIndex]);
+		array1.splice(randomIndex, 1);
 	}
 }
 
@@ -110,20 +113,27 @@ function pushFeedback(state, object) {
 	}
 }
 
-// function to reset state
-function resetState(state) {
+// function to reset state and question-object array
+function reset(state) {
 	state.quiz = [];
+	questionObjectArray = [];
+}
+
+// function to return question objects to question array
+function pushBackQuestions (state) {
+	for (i=0; i < questionObjectArray.length; i++) {
+		questions.push(questionObjectArray[i]);
+	}
 }
 
 // function to build and render question page
 function renderQuestionPage(element, state) {
-	var questionText = 'Of the choices, for which idea is ' + state.quiz.question.philosopher + ' best known?';
 	element.html($(
 		'<h3>Question ' + state.quiz.progress + ' of 5</h3>' +
-		'<p class="content">' + questionText + '</p>' +
+		'<p class="content">Of the choices, for which idea is ' + state.quiz.question.philosopher +' best known?</p>' +
 		'<div>' +
       '<form id="js-quiz">' +
-        '<input type="radio" name="quiz-answer" id="answer1" value="answer1" checked />' +
+        '<input type="radio" name="quiz-answer" id="answer1" value="answer1" required/>' +
         '<label for="answer1">' + state.quiz.question.answer + '</label>' +
         '<br>' +
         '<input type="radio" name="quiz-answer" id="answer2" value="answer2" />' +
@@ -137,6 +147,7 @@ function renderQuestionPage(element, state) {
         '<br>' +
         '<button type="submit">Submit</button>' +
       '</form>' +
+      '<p>You have answered ' + state.quiz.correct + ' question(s) correctly!' +
     '</div>'
 	));
 }
@@ -206,7 +217,8 @@ $(document).ready(function() {
 
 	// restart quiz from results page
 	$(document).on('click', '#restart', function(event) {
-		resetState(state);
+		pushBackQuestions(state);
+		reset(state);
 		renderStartPage($('main'));
 	});
 });
