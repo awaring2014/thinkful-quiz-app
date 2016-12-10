@@ -163,8 +163,8 @@ function buildResultsPage(state) {
 function buildStartPage(state) {
 	return $(
 		'<main>' +
-    	'<h3>This box will hold the welcome message</h3>' +
-			'<p class="content">This box will hold the quiz instructions</p>' +
+    	'<h3>Test your knowledge on the history of philosophy with this quick quiz!</h3>' +
+			'<p class="content">Click "Begin" to start!</p>' +
 			'<br>' +
 			'<button id="begin">Begin</button>' +
 		'</main>'
