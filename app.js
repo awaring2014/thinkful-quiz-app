@@ -73,7 +73,7 @@ var state = {
 };
 
 // function to populate questionObjectArray with 5 random questions
-function createQuizObject(array1, array2) {
+function createQuizObjectArray(array1, array2) {
 	for (i=0; i < 5; i++) {
 		array2.push(array1[Math.floor(Math.random() * 6) + 1]);
 	}
@@ -84,9 +84,10 @@ function pushQuestion(state, object) {
 	state.quiz.question = object[state.quiz.progress-1];
 }
 
-// function to initialize Question Progress object w/i state.quiz
-function initQuestionProgressCounter(state) {
+// function to initialize Question Progress object and Answer object w/i state.quiz
+function initCounters(state) {
 	state.quiz.progress = 1;
+	state.quiz.correct = 0;
 }
 
 // function to increment Question Progress object
@@ -94,10 +95,16 @@ function incrementQuestionProgressCounter(state) {
 	state.quiz.progress++;
 }
 
-// function to push feedback object to state based on answer chosen
+// function to track # of correct answers
+function incrementCorrectAnswerCounter(state) {
+	state.quiz.correct++;
+}
+
+// function to push feedback object to state based on answer chosen and increment correctAnswerCounter if correct
 function pushFeedback(state, object) {
 	if ($("input[type='radio'][name='quiz-answer']:checked").val() === 'answer1') {
 		state.quiz.feedback = object.correct;
+		incrementCorrectAnswerCounter(state);
 	} else {
 		state.quiz.feedback = object.incorrect;
 	}
@@ -135,7 +142,7 @@ function buildQuestion(state) {
 }
 
 // function to build feedback page in html
-function buildFeedbackPage (state) {
+function buildFeedbackPage(state) {
 	return $(
 		'<h3>' + state.quiz.feedback.h3 + '</h3>' +
 		'<p class="content">' + state.quiz.feedback.p + '</p>' +
@@ -144,7 +151,7 @@ function buildFeedbackPage (state) {
 }
 
 // function to build results page in html
-function buildResultsPage (state) {
+function buildResultsPage(state) {
 	return $(
 		'<h3>Congratulations, you finished the quiz!</h3>' +
 		'<p class="content">This will contain the score.</p>' +
@@ -153,7 +160,7 @@ function buildResultsPage (state) {
 }
 
 // function to build start page in html
-function buildStartPage (state) {
+function buildStartPage(state) {
 	return $(
 		'<main>' +
     	'<h3>This box will hold the welcome message</h3>' +
@@ -176,19 +183,18 @@ function renderResultsPage(element, state) {
 	element.html(buildResultsPage(state));
 }
 
-function renderStartPage (element, state) {
+function renderStartPage(element, state) {
 	element.html(buildStartPage(state));
 }
 
 // event listeners to call state-modifying and state-rendering functions
-
 $(document).ready(function() {
 
 	// begin quiz
-	$('.begin').click(function (event) {
+	$('.begin').click(function(event) {
 		event.preventDefault();
-		initQuestionProgressCounter(state);
-		createQuizObject(questions, questionObjectArray);
+		initCounters(state);
+		createQuizObjectArray(questions, questionObjectArray);
 		pushQuestion(state, questionObjectArray);
 		renderQuestionPage($('main'), state);
 	});
@@ -204,6 +210,7 @@ $(document).ready(function() {
 	// continue quiz from feedback page
 	$(document).on('click', '#continue', function(event) {
 		event.preventDefault();
+		delete state.quiz.feedback;
 		if (state.quiz.progress < 5) {
 			incrementQuestionProgressCounter(state);
 			pushQuestion(state, questionObjectArray);
