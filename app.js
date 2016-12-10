@@ -76,7 +76,6 @@ var state = {
 function createQuizObjectArray(array1, array2) {
 	for (i=0; i < 5; i++) {
 		var randomIndex = Math.floor(Math.random() * (10 - i)) ;
-		console.log(randomIndex);
 		array2.push(array1[randomIndex]);
 		array1.splice(randomIndex, 1);
 	}
