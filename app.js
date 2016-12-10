@@ -154,7 +154,7 @@ function buildFeedbackPage(state) {
 function buildResultsPage(state) {
 	return $(
 		'<h3>Congratulations, you finished the quiz!</h3>' +
-		'<p class="content">This will contain the score.</p>' +
+		'<p class="content">You answered ' + state.quiz.correct + ' questions correctly!</p>' +
 		'<button id="restart">Restart Quiz</button>'
 	);
 }
@@ -166,7 +166,7 @@ function buildStartPage(state) {
     	'<h3>This box will hold the welcome message</h3>' +
 			'<p class="content">This box will hold the quiz instructions</p>' +
 			'<br>' +
-			'<button class="begin">Begin</button>' +
+			'<button id="begin">Begin</button>' +
 		'</main>'
 	);
 }
@@ -191,7 +191,7 @@ function renderStartPage(element, state) {
 $(document).ready(function() {
 
 	// begin quiz
-	$('.begin').click(function(event) {
+	$(document).on('click', '#begin', function(event) {
 		event.preventDefault();
 		initCounters(state);
 		createQuizObjectArray(questions, questionObjectArray);
@@ -223,6 +223,6 @@ $(document).ready(function() {
 	// restart quiz from results page
 	$(document).on('click', '#restart', function(event) {
 		resetState(state);
-		renderStartpage($('main'), state);
+		renderStartPage($('main'), state);
 	});
 });
