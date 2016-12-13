@@ -73,16 +73,17 @@ var state = {
 
 // function to choose question from bank and push it to state.quiz
 function chooseQuestion(state, array) {
-	var condition = true;
-	while (condition) {
+	var isNewQuestion = false;
+	do {
 		var randomIndex = Math.floor(Math.random() * (questions.length));
 		if ($.inArray(randomIndex, state.quiz.askedQuestions) === -1) {
 			state.quiz.question = questions[randomIndex];
 			state.quiz.askedQuestions.push(randomIndex);
-			condition = false;
-		} 
-	}
+			isNewQuestion = true;
+		}
+	} while (!isNewQuestion);
 }
+
 
 // function to initialize Question Progress object and Answer object w/i state.quiz
 function initCounters(state) {
