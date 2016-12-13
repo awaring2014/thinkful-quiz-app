@@ -52,9 +52,6 @@ var questions = [
 	}
 ];
 
-// array containing question objects. From here, question objects will be pushed one at a time to state.quiz
-var questionObjectArray = [];
-
 // object containing feedback objects. From here, feedback objects will be pushed one at a time to state.quiz
 var feedbackObject = {
 	correct: {
@@ -69,21 +66,22 @@ var feedbackObject = {
 
 // state variable
 var state = {
-	quiz: {}
+	quiz: {
+		askedQuestions: []
+	}
 };
 
-// function to populate questionObjectArray with 5 random questions
-function createQuizObjectArray(array1, array2) {
-	for (i=0; i < 5; i++) {
-		var randomIndex = Math.floor(Math.random() * (questions.length - i)) ;
-		array2.push(array1[randomIndex]);
-		array1.splice(randomIndex, 1);
+// function to choose question from bank and push it to state.quiz
+function chooseQuestion(state, array) {
+	var condition = true;
+	while (condition) {
+		var randomIndex = Math.floor(Math.random() * (questions.length));
+		if (state.quiz.askedQuestions.indexOf(questions[randomIndex]) === -1) {
+			state.quiz.question = questions[randomIndex];
+			state.quiz.askedQuestions.push(randomIndex);
+			condition = false;
+		} 
 	}
-}
-
-// function to push single question object into state.quiz
-function pushQuestion(state, object) {
-	state.quiz.question = object[state.quiz.progress-1];
 }
 
 // function to initialize Question Progress object and Answer object w/i state.quiz
@@ -188,8 +186,7 @@ $(document).ready(function() {
 	$(document).on('click', '#begin', function(event) {
 		event.preventDefault();
 		initCounters(state);
-		createQuizObjectArray(questions, questionObjectArray);
-		pushQuestion(state, questionObjectArray);
+		chooseQuestion(state, questions);
 		renderQuestionPage($('main'), state);
 	});
 
@@ -207,7 +204,7 @@ $(document).ready(function() {
 		delete state.quiz.feedback;
 		if (state.quiz.progress < 5) {
 			incrementQuestionProgressCounter(state);
-			pushQuestion(state, questionObjectArray);
+			chooseQuestion(state, questions);
 			renderQuestionPage($('main'), state);
 		} else {
 			renderResultsPage($('main'), state);
@@ -216,7 +213,6 @@ $(document).ready(function() {
 
 	// restart quiz from results page
 	$(document).on('click', '#restart', function(event) {
-		pushBackQuestions(state);
 		reset(state);
 		renderStartPage($('main'));
 	});
