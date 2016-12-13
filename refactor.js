@@ -76,7 +76,7 @@ function chooseQuestion(state, array) {
 	var condition = true;
 	while (condition) {
 		var randomIndex = Math.floor(Math.random() * (questions.length));
-		if (state.quiz.askedQuestions.indexOf(questions[randomIndex]) === -1) {
+		if ($.inArray(randomIndex, state.quiz.askedQuestions) === -1) {
 			state.quiz.question = questions[randomIndex];
 			state.quiz.askedQuestions.push(randomIndex);
 			condition = false;
