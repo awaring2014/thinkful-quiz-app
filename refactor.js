@@ -113,7 +113,7 @@ function pushFeedback(state, object) {
 // function to reset state and question-object array
 function reset(state) {
 	state.quiz = [];
-	questionObjectArray = [];
+	state.quiz.askedQuestions = [];
 }
 
 // function to return question objects to question array
